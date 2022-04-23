@@ -1,0 +1,36 @@
+{% extends "header.html" %}
+{% block content %}
+<h4>Game against {{opp}}</h1>
+<!-- <div class="row">
+  <div class="col d-flex justify-content-center"> -->
+    {% if is_user_turn %}
+      <div class="row d-flex justify-content-center">
+        <img src="data:image/jpeg;base64,{{board_img}}" usemap="#image-map"/>
+      </div>
+      <br/>
+      <div class="row d-flex justify-content-center">
+        <a href="{{url_for('games.update_game', game_id=game.game_id, cell=cell)}}"><button class="btn btn-outline-primary">Submit</button></a>
+      </div>
+    {% else %}
+      <div class="row d-flex justify-content-center">
+        <img src="data:image/jpeg;base64,{{board_img}}"/>
+      </div>
+    {% endif %}
+  <!-- </div>
+</div> -->
+
+{% if is_user_turn %}
+  <map name="image-map">
+    {% if 0 not in game.game_data %}<area target="" alt="Cell 0" title="cell_0" href="{{url_for('games.game', game_id=game.game_id, cell=0)}}" coords="0,0,140,140" shape="rect">{% endif %}
+    {% if 1 not in game.game_data %}<area target="" alt="Cell 1" title="cell_1" href="{{url_for('games.game', game_id=game.game_id, cell=1)}}" coords="150,1,290,140" shape="rect">{% endif %}
+    {% if 2 not in game.game_data %}<area target="" alt="Cell 2" title="cell_2" href="{{url_for('games.game', game_id=game.game_id, cell=2)}}" coords="440,140,300,0" shape="rect">{% endif %}
+    {% if 3 not in game.game_data %}<area target="" alt="Cell 3" title="cell_3" href="{{url_for('games.game', game_id=game.game_id, cell=3)}}" coords="0,150,140,290" shape="rect">{% endif %}
+    {% if 4 not in game.game_data %}<area target="" alt="Cell 4" title="cell_4" href="{{url_for('games.game', game_id=game.game_id, cell=4)}}" coords="150,150,290,290" shape="rect">{% endif %}
+    {% if 5 not in game.game_data %}<area target="" alt="Cell 5" title="cell_5" href="{{url_for('games.game', game_id=game.game_id, cell=5)}}" coords="300,150,440,290" shape="rect">{% endif %}
+    {% if 6 not in game.game_data %}<area target="" alt="Cell 6" title="cell_6" href="{{url_for('games.game', game_id=game.game_id, cell=6)}}" coords="0,300,140,440" shape="rect">{% endif %}
+    {% if 7 not in game.game_data %}<area target="" alt="Cell 7" title="cell_7" href="{{url_for('games.game', game_id=game.game_id, cell=7)}}" coords="150,300,290,440" shape="rect">{% endif %}
+    {% if 8 not in game.game_data %}<area target="" alt="Cell 8" title="cell_8" href="{{url_for('games.game', game_id=game.game_id, cell=8)}}" coords="300,300,440,440" shape="rect">{% endif %}
+  </map>
+{% endif %}
+
+{% endblock %}

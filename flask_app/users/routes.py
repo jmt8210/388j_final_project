@@ -17,7 +17,8 @@ users = Blueprint("users", __name__)
 
 @users.route('/')
 def index():
-  return render_template('index.html')
+  games = list(Game.objects())
+  return render_template('index.html', games=games)
 
 @users.route("/register", methods=["GET", "POST"])
 def register():
@@ -49,8 +50,16 @@ def login():
 @users.route('/account')
 @login_required
 def account():
-  games = list(Game.objects(user_one=current_user.username))
-  games += list(Game.objects(user_two=current_user.username))
+  games1 = list(Game.objects(user_one=current_user.username))
+  games2 = list(Game.objects(user_two=current_user.username))
+  games = []
+  gameids = []
+  for i in games1:
+    games.append(i)
+    gameids.append(i.game_id)
+  for i in games2:
+    if i.game_id not in gameids:
+      games.append(i)
   return render_template('account.html', games=games)
 
 @users.route('/logout')

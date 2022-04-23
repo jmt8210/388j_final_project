@@ -3,8 +3,35 @@
 <div class="d-flex justify-content-center">
   <h1 class="display-1">Welcome to Tic Tac Toe!</h1>
 </div>
+<hr/>
 <div class="float-right">
   <a href="{{url_for('games.create_game')}}"><button class="btn btn-outline-primary">Create New Game</button></a>
 </div>
+<br/>
+<br/>
+{% for g in games %}
+  <div style="margin-bottom: 10px; padding: 10px; background-color: #f9f9f9;" class="row d-flex justify-content-center">
+    <div class="col-sm-3">
+      <a href="{{url_for('games.game', game_id=g.game_id)}}">
+        <img width="200rem" src="{{url_for('games.get_game_img', game_id=g.game_id)}}">
+      </a>
+    </div>
+    <div class="col-sm-9">
+      <div class="card">
+        <div class="card-header">
+          {{g.user_one}} vs. {{g.user_two}}
+        </div>
+        <div class="card-body">
+          <h5>Comments:</h5>
+          <br/>
+          <p>Add Comment:</p>
+          <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+          <br/>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endfor %}
 
 {% endblock %}

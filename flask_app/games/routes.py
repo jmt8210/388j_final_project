@@ -21,7 +21,7 @@ games = Blueprint("games", __name__)
 @games.route('/play')
 @login_required
 def play():
-  return render_template('account.html')
+  return redirect(url_for('users.account'))
 
 
 @games.route("/create_game", methods=['GET', 'POST'])
@@ -36,15 +36,12 @@ def create_game():
   return render_template('create_game.html', current_user=current_user, form=form)
 
 @games.route('/game/<game_id>')
-@login_required
 def game(game_id):
   game = Game.objects(game_id=game_id).first()
   game_data = list(game.game_data)
   is_user_turn = False
   if (game.user_turn == 1 and game.user_one == current_user.username) or (game.user_turn == 2 and game.user_two == current_user.username):
     is_user_turn = True
-  print(is_user_turn)
-  opp = game.user_one if game.user_one != current_user.username else game.user_two
   args = request.args.to_dict()
   cell = -1
   if 'cell' in args:
@@ -52,12 +49,15 @@ def game(game_id):
     game_data.append(cell)
   board_img = draw_game(game_data)
 
-  return render_template('game.html', board_img=board_img, game=game, cell=cell, is_user_turn=is_user_turn, opp=opp)
+  return render_template('game.html', board_img=board_img, game=game, cell=cell, is_user_turn=is_user_turn)
 
 @games.route('/update_game/<game_id>/<cell>')
 def update_game(game_id, cell):
   game = Game.objects(game_id=game_id).first()
   game_data = list(game.game_data)
+  if int(cell) in game_data:
+    flash("Please select a valid cell")
+    return redirect(url_for('games.game', game_id=game_id))
   game_data.append(int(cell))
   if check_win(game_data):
     game.modify(game_data=game_data, user_turn=0, winner=current_user.username)

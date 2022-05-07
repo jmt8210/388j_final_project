@@ -20,7 +20,7 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField("Sign Up")
 
     def validate_username(self, username):
-        user = User.objects(username=username.data).first()
+        user = User.objects(username=username.data.lower()).first()
         if user is not None:
             raise ValidationError("Username is taken")
 
@@ -43,7 +43,7 @@ class LoginForm(FlaskForm):
     submit = SubmitField("Log In")
 
     def validate_username(self, username):
-        user = User.objects(username=username.data).first()
+        user = User.objects(username=username.data.lower()).first()
         if user is None:
             raise ValidationError("Username not found, please create an account")
 
@@ -55,7 +55,7 @@ class UpdateUserInfo(FlaskForm):
     submit = SubmitField("Log In")
 
     def validate_username(self, username):
-        user = User.objects(username=username.data).first()
+        user = User.objects(username=username.data.lower()).first()
         if user is None:
             raise ValidationError("Username not found, please create an account")
 
@@ -66,7 +66,7 @@ class CreateGameForm(FlaskForm):
     submit = SubmitField("Send Game Invitation")
 
     def validate_username(self, username):
-        user = User.objects(username=username.data).first()
+        user = User.objects(username=username.data.lower()).first()
         if user is None:
             raise ValidationError("Username not found, please provide a valid username")
 
@@ -81,6 +81,6 @@ class UpdateUsernameForm(FlaskForm):
     submit_username = SubmitField("Update Username")
 
     def validate_username(self, username):
-        user = User.objects(username=username.data).first()
+        user = User.objects(username=username.data.lower()).first()
         if user is not None:
             raise ValidationError("Username is taken")

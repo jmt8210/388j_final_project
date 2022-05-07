@@ -21,7 +21,17 @@ games = Blueprint("games", __name__)
 @games.route('/play')
 @login_required
 def play():
-  return redirect(url_for('users.account'))
+  games1 = list(Game.objects(user_one=current_user.username))
+  games2 = list(Game.objects(user_two=current_user.username))
+  games = []
+  gameids = []
+  for i in games1:
+    games.append(i)
+    gameids.append(i.game_id)
+  for i in games2:
+    if i.game_id not in gameids:
+      games.append(i)
+  return render_template('play.html', games=games)
 
 
 @games.route("/create_game", methods=['GET', 'POST'])
@@ -30,9 +40,9 @@ def create_game():
   form = CreateGameForm()
   if form.validate_on_submit():
     id = len(Game.objects())
-    game = Game(user_one=current_user.username, user_two=form.username.data, game_id=id, user_turn=2, game_data=[])
+    game = Game(user_one=current_user.username, user_two=form.username.data.lower(), game_id=id, user_turn=2, game_data=[], winner=None)
     game.save()
-    return redirect(url_for('users.account'))
+    return redirect(url_for('games.play'))
   return render_template('create_game.html', current_user=current_user, form=form)
 
 @games.route('/game/<game_id>')
@@ -61,6 +71,8 @@ def update_game(game_id, cell):
   game_data.append(int(cell))
   if check_win(game_data):
     game.modify(game_data=game_data, user_turn=0, winner=current_user.username)
+  elif len(game_data) == 9:
+    game.modify(game_data=game_data, user_turn=0, winner='tie')
   else:
     user_turn = 1
     if game.user_turn == 1:
@@ -158,7 +170,10 @@ def find_three_in_a_row(game_data):
   one_moves = [0 for _ in range(9)]
   two_moves = [0 for _ in range(9)]
   for i in range(len(game_data)):
-    two_moves[game_data[i]] = 1 if i % 2 == 0 else one_moves[game_data[i]]
+    if i % 2 == 0:
+      one_moves[game_data[i]] = 1
+    else:
+      two_moves[game_data[i]] = 1
 
   # Check horizontal
   for i in range(3):

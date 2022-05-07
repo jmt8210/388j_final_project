@@ -49,6 +49,7 @@ from flask_login import (
     login_required,
 )
 from flask_bcrypt import Bcrypt
+from flask_talisman import Talisman
 from werkzeug.utils import secure_filename
 
 # stdlib
@@ -59,6 +60,8 @@ import os
 # from .client import MovieClient
 
 
+
+
 db = MongoEngine()
 login_manager = LoginManager()
 bcrypt = Bcrypt()
@@ -66,6 +69,7 @@ bcrypt = Bcrypt()
 
 from .games.routes import games
 from .users.routes import users
+from .info.routes import info
 
 
 def page_not_found(e):
@@ -74,6 +78,14 @@ def page_not_found(e):
 
 def create_app(test_config=None):
     app = Flask(__name__)
+
+    csp = {
+        'default-src': "'self'",
+        'img-src': "'self' data:",
+        'style-src': "'self' 'unsafe-inline' stackpath.bootstrapcdn.com",
+        'script-src': "code.jquery.com stackpath.bootstrapcdn.com cdn.jsdelivr.net"
+    }
+    Talisman(app, content_security_policy=csp)
 
     app.config.from_pyfile("config.py", silent=False)
     if test_config is not None:
@@ -85,6 +97,7 @@ def create_app(test_config=None):
 
     app.register_blueprint(games)
     app.register_blueprint(users)
+    app.register_blueprint(info)
     app.register_error_handler(404, page_not_found)
 
     login_manager.login_view = "users.login"

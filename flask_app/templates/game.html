@@ -1,7 +1,7 @@
 {% extends "header.html" %}
 {% block content %}
 <meta http-equiv="refresh" content="5">
-<h4>{{game.user_one}} vs. {{game.user_two}}</h1>
+<h4>{{ game.user_one.capitalize() }} vs. {{ game.user_two.capitalize() }}</h1>
 <!-- <div class="row">
   <div class="col d-flex justify-content-center"> -->
     {% with messages = get_flashed_messages() %}
@@ -13,13 +13,27 @@
         </ul>
       {% endif %}
     {% endwith %}
-    {% if is_user_turn %}
+    {% if is_user_turn and game.winner == None %}
       <div class="row d-flex justify-content-center">
         <img src="data:image/jpeg;base64,{{board_img}}" usemap="#image-map"/>
       </div>
       <br/>
       <div class="row d-flex justify-content-center">
         <a href="{{url_for('games.update_game', game_id=game.game_id, cell=cell)}}"><button class="btn btn-outline-primary">Submit</button></a>
+      </div>
+    {% elif game.winner == 'tie' %}
+      <div class="row d-flex justify-content-center">
+        <img src="data:image/jpeg;base64,{{board_img}}"/>
+      </div>
+      <div class="row d-flex justify-content-center">
+        <div class="display-4">It's a tie!</div>
+      </div>
+    {% elif game.winner != None and game.winner != 'tie' %}
+      <div class="row d-flex justify-content-center">
+        <img src="data:image/jpeg;base64,{{board_img}}"/>
+      </div>
+      <div class="row d-flex justify-content-center">
+        <div class="display-4">{{ game.winner.capitalize() }} wins!</div>
       </div>
     {% else %}
       <div class="row d-flex justify-content-center">

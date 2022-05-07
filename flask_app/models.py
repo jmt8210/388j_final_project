@@ -16,7 +16,6 @@ class User(db.Document, UserMixin):
 
 class Game(db.Document):
   game_id = db.IntField(required=True)
-  # accepted = db.BooleanField(required=True)
   user_turn = db.IntField(required=True)
   user_one = db.StringField(required=True)
   user_two = db.StringField(required=True)
@@ -25,3 +24,9 @@ class Game(db.Document):
 
   def get_id(self):
       return self.id
+
+class Comment(db.Document):
+  username = db.StringField(required=True)
+  comment = db.StringField(required=True)
+  game_id = db.IntField(required=True)
+  date = db.DateTimeField(required=True)

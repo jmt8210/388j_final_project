@@ -1,30 +1,21 @@
 {% extends "header.html" %}
 {% block content %}
-  <div class="row">
-    <div class="col">
-      <h1 class="display-3">{{ current_user.username }}'s Account</h1>
-      <div class="float-right">
-        <a href="{{url_for('games.create_game')}}"><button class="btn btn-outline-primary">Create New Game</button></a>
-      </div>
+<h1 class="display-3">{{ current_user.username.capitalize() }}'s Account</h1>
+<h1>Update Username</h1>
+<form method="POST" action="">
+  {{ username_form.csrf_token }}
+  <div class="form-group">
+    {{ username_form.username.label }}
+    {{ username_form.username(class="form-control") }}
+
+    {% if username_form.username.errors %}
+    <div class="alert alert-warning" role="alert">
+        {% for error in username_form.username.errors %}
+            <span>{{ error }}</span>
+        {% endfor %}
     </div>
+    {% endif %}
   </div>
-  <br/>
-  <hr/>
-  <h1>
-    {{ current_user.username }}'s Games
-  </h1>
-  <div class="row d-flex justify-content-center">
-    {% for g in games %}
-      <a href="{{url_for('games.game', game_id=g.game_id)}}">
-        <div style="margin: 10px" class="col-sm-3">
-          <div class="card" style="width: 10rem;">
-            <img class="card-img-top" src="{{url_for('games.get_game_img', game_id=g.game_id)}}">
-            <div class="card-header">
-              {{ g.user_one if g.user_two == current_user.username else g.user_two }}
-            </div>
-          </div>
-        </div>
-      </a>
-    {% endfor %}
-  </div>
+  {{ username_form.submit_username(class="btn btn-primary") }}
+</form>
 {% endblock %}

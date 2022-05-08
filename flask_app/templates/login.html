@@ -20,6 +20,13 @@
             {% endfor %}
           </div>
           {% endif %}
+          {% if flashes %}
+          <div class="alert alert-warning" role="alert">
+            {% for error in flashes %}
+            <span>{{ error }}</span>
+            {% endfor %}
+          </div>
+          {% endif %}
         </div>
         <div class="form-group">
           {{ form.password.label }}

@@ -65,7 +65,7 @@ def login():
         return redirect(url_for('users.account'))
       else:
         flash('Login failed, please try again')
-    return render_template('login.html', current_user=current_user, form=form)
+    return render_template('login.html', current_user=current_user, form=form, flashes=get_flashed_messages())
 
 @users.route('/account', methods=['GET', 'POST'])
 @login_required

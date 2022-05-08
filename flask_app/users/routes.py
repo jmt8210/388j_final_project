@@ -24,6 +24,7 @@ def index():
   if current_user.is_authenticated:
     return redirect(url_for('users.feed'))
   games = list(Game.objects())
+  games.sort(key = lambda x: x.date, reverse=True)
   comments = list(Comment.objects())
   return render_template('index.html', games=games, comments=comments)
 
@@ -31,6 +32,7 @@ def index():
 @login_required
 def feed():
   games = list(Game.objects())
+  games.sort(key = lambda x: x.date, reverse=True)
   for g in games:
     g.form = CreateGameComment(prefix=str(g.game_id))
     if g.form.data['submit'] and g.form.validate():

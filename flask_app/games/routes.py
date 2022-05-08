@@ -14,6 +14,7 @@ from ..forms import (
   RegistrationForm,
   CreateGameForm
 )
+from datetime import datetime
 # from .. import bcrypt
 
 games = Blueprint("games", __name__)
@@ -40,7 +41,7 @@ def create_game():
   form = CreateGameForm()
   if form.validate_on_submit():
     id = len(Game.objects())
-    game = Game(user_one=current_user.username, user_two=form.username.data.lower(), game_id=id, user_turn=2, game_data=[], winner=None)
+    game = Game(user_one=current_user.username, user_two=form.username.data.lower(), game_id=id, user_turn=2, game_data=[], winner=None, date=datetime.now())
     game.save()
     return redirect(url_for('games.play'))
   return render_template('create_game.html', current_user=current_user, form=form)

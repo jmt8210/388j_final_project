@@ -21,6 +21,7 @@ class Game(db.Document):
   user_two = db.StringField(required=True)
   game_data = db.ListField()
   winner = db.StringField()
+  date = db.DateTimeField(require=True)
 
   def get_id(self):
       return self.id

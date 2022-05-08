@@ -17,7 +17,7 @@
           <div class="card" style="width: 10rem;">
             <img class="card-img-top" src="{{url_for('games.get_game_img', game_id=g.game_id)}}">
             <div class="card-header">
-              {{ g.user_one if g.user_two == current_user.username else g.user_two }}
+              {{ g.user_one.capitalize() if g.user_two == current_user.username else g.user_two.capitalize() }}
             </div>
           </div>
         </div>

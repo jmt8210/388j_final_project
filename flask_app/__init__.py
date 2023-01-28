@@ -95,9 +95,9 @@ def create_app(test_config=None):
     login_manager.init_app(app)
     bcrypt.init_app(app)
 
-    app.register_blueprint(games)
-    app.register_blueprint(users)
-    app.register_blueprint(info)
+    app.register_blueprint(games, url_prefix='/388jfinal')
+    app.register_blueprint(users, url_prefix='/388jfinal')
+    app.register_blueprint(info, url_prefix='/388jfinal')
     app.register_error_handler(404, page_not_found)
 
     login_manager.login_view = "users.login"
